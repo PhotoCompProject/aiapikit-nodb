@@ -1,7 +1,6 @@
 import React from 'react';
-import { Edit2, Trash2, Info } from 'lucide-react';
+import { Edit2, Trash2 } from 'lucide-react';
 import { Category } from '../../../types/admin';
-import { Card } from '../../ui/Card';
 import { Button } from '../../ui/Button';
 
 interface CategoryListProps {
@@ -16,86 +15,51 @@ export const CategoryList: React.FC<CategoryListProps> = ({
   onDelete,
 }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {categories.map((category) => (
-        <Card key={category.id} className="bg-white border-gray-100 hover:border-orange-500/20">
-          <div className="flex justify-between items-start mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">
-              {category.name}
-            </h3>
-            <div className="flex space-x-2">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => onEdit(category)}
-              >
-                <Edit2 className="w-4 h-4" />
-              </Button>
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => onDelete(category.id)}
-                className="text-red-600 hover:text-red-700"
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <h4 className="text-sm font-medium text-gray-700 mb-2">Slider Definitions</h4>
-              <div className="space-y-2">
-                {category.sliderDefinitions.map((slider, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
+    <div className="bg-white rounded-lg shadow overflow-hidden">
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
+          <tr>
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Name
+            </th>
+            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {categories.map((category) => (
+            <tr key={category.id} className="hover:bg-gray-50">
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm font-medium text-gray-900">{category.name}</div>
+                <div className="text-sm text-gray-500">
+                  {category.sliderDefinitions.length} sliders, {category.outputDefinitions.length} outputs
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <div className="flex justify-end space-x-2">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => onEdit(category)}
+                    className="inline-flex items-center"
                   >
-                    <span className="text-sm text-gray-700">{slider.name}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-sm font-medium text-gray-700 mb-2">Output Definitions</h4>
-              <div className="space-y-2">
-                {category.outputDefinitions.map((output, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
+                    <Edit2 className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => onDelete(category.id)}
+                    className="text-red-600 hover:text-red-700 inline-flex items-center"
                   >
-                    <span className="text-sm text-gray-700">{output.name}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-sm font-medium text-gray-700 mb-2">Price Detail Fields</h4>
-              <div className="space-y-2">
-                {category.priceDetailFields.map((field, index) => (
-                  <div
-                    key={index}
-                    className="p-3 bg-gray-50 rounded-lg"
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm font-medium text-gray-700">{field.name}</span>
-                      <span className="text-xs text-gray-500 px-2 py-1 bg-gray-100 rounded">
-                        {field.type}
-                      </span>
-                    </div>
-                    <div className="flex items-start space-x-1 text-xs text-gray-500">
-                      <Info className="w-3 h-3 mt-0.5 flex-shrink-0" />
-                      <span>{field.description}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </Card>
-      ))}
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
