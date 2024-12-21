@@ -1,65 +1,58 @@
 import React from 'react';
 import { AdminLayout } from '../components/Admin/Layout/AdminLayout';
 import { StatsCard } from '../components/Admin/Dashboard/StatsCard';
-import { RecentActivity } from '../components/Admin/Dashboard/RecentActivity';
-import { Database, BarChart } from 'lucide-react';
+import { AuditLogList } from '../components/Admin/Dashboard/AuditLogList';
+import { Database, BarChart, Users, Activity } from 'lucide-react';
 import { useAdminStore } from '../store/adminStore';
 
 export const AdminDashboard: React.FC = () => {
-  const { categories, providers } = useAdminStore();
+  const { categories, providers, admins, auditLogs } = useAdminStore();
 
   const stats = [
     {
       label: 'Total APIs',
       value: providers.length,
       icon: Database,
-      trend: { value: 12, isPositive: true }
+      color: 'blue' as const
     },
     {
       label: 'Active Categories',
       value: categories.length,
       icon: BarChart,
-      trend: { value: 8, isPositive: true }
-    }
-  ];
-
-  const recentActivities = [
-    {
-      id: '1',
-      type: 'provider_added',
-      description: 'New API Provider Added: Claude 3',
-      timestamp: '2 hours ago'
+      color: 'green' as const
     },
     {
-      id: '2',
-      type: 'category_updated',
-      description: 'Category Updated: Text Generation',
-      timestamp: '4 hours ago'
+      label: 'Admin Users',
+      value: admins.length,
+      icon: Users,
+      color: 'purple' as const
     },
     {
-      id: '3',
-      type: 'provider_updated',
-      description: 'Provider Updated: GPT-4',
-      timestamp: '1 day ago'
+      label: 'Recent Activities',
+      value: auditLogs.length,
+      icon: Activity,
+      color: 'orange' as const
     }
   ];
 
   return (
     <AdminLayout title="Dashboard">
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="space-y-8">
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat) => (
             <StatsCard
               key={stat.label}
               icon={stat.icon}
               label={stat.label}
               value={stat.value}
-              trend={stat.trend}
+              color={stat.color}
             />
           ))}
         </div>
 
-        <RecentActivity activities={recentActivities} />
+        {/* Activity Log */}
+        <AuditLogList />
       </div>
     </AdminLayout>
   );

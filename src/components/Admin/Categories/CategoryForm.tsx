@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Minus, Save } from 'lucide-react';
-import { Category, SliderDefinition, OutputDefinition, PriceDetailField } from '../../../types/admin';
+import { Category } from '../../../types/admin';
+import { Button } from '../../ui/Button';
 
 interface CategoryFormProps {
   onSubmit: (data: Category) => void;
@@ -68,111 +69,127 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({ onSubmit, initialDat
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Category Name</label>
-        <input
-          type="text"
-          value={formData.name}
-          onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-          className="mt-1 block w-full rounded-lg bg-white border border-gray-200 text-gray-900 px-4 py-2 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
-          required
-        />
-      </div>
-
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-medium text-gray-900">Slider Definitions</h3>
-          <button
-            type="button"
-            onClick={addSlider}
-            className="text-orange-500 hover:text-orange-600"
-          >
-            <Plus className="h-5 w-5" />
-          </button>
+    <form onSubmit={handleSubmit} className="max-w-6xl mx-auto space-y-8">
+      {/* Row 1: Category Name */}
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900">Basic Information</h3>
         </div>
-        
-        {formData.sliderDefinitions.map((slider, index) => (
-          <div key={index} className="space-y-2 p-4 bg-white rounded-lg border border-gray-100">
-            <div className="flex items-center space-x-4">
-              <input
-                type="text"
-                value={slider.name}
-                onChange={(e) => {
-                  const newSliders = [...formData.sliderDefinitions];
-                  newSliders[index].name = e.target.value;
-                  setFormData(prev => ({ ...prev, sliderDefinitions: newSliders }));
-                }}
-                placeholder="Slider name (e.g., Input Tokens, Resolution)"
-                className="flex-1 rounded-lg bg-white border border-gray-200 text-gray-900 px-4 py-2 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
-              />
-              <button
-                type="button"
-                onClick={() => removeSlider(index)}
-                className="text-red-500 hover:text-red-600"
-              >
-                <Minus className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-medium text-gray-900">Output Definitions</h3>
-          <button
-            type="button"
-            onClick={addOutput}
-            className="text-orange-500 hover:text-orange-600"
-          >
-            <Plus className="h-5 w-5" />
-          </button>
+        <div className="p-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Category Name</label>
+          <input
+            type="text"
+            value={formData.name}
+            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+            className="w-full rounded-lg bg-gray-50 border border-gray-200 text-gray-900 px-4 py-2.5 focus:bg-white focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+            required
+          />
         </div>
-        
-        {formData.outputDefinitions.map((output, index) => (
-          <div key={index} className="space-y-2 p-4 bg-white rounded-lg border border-gray-100">
-            <div className="flex items-center space-x-4">
-              <input
-                type="text"
-                value={output.name}
-                onChange={(e) => {
-                  const newOutputs = [...formData.outputDefinitions];
-                  newOutputs[index].name = e.target.value;
-                  setFormData(prev => ({ ...prev, outputDefinitions: newOutputs }));
-                }}
-                placeholder="Output name (e.g., Total Cost, Cost per Unit)"
-                className="flex-1 rounded-lg bg-white border border-gray-200 text-gray-900 px-4 py-2 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
-              />
-              <button
-                type="button"
-                onClick={() => removeOutput(index)}
-                className="text-red-500 hover:text-red-600"
-              >
-                <Minus className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-        ))}
       </div>
 
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-medium text-gray-900">Price Detail Fields</h3>
-          <button
+      {/* Row 2: Input and Output Fields */}
+      <div className="grid grid-cols-2 gap-6">
+        {/* Input Fields */}
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+          <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <h3 className="text-lg font-semibold text-gray-900">Input Fields</h3>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={addSlider}
+              className="text-orange-500 hover:text-orange-600"
+            >
+              <Plus className="h-5 w-5" />
+            </Button>
+          </div>
+          <div className="p-6 space-y-4">
+            {formData.sliderDefinitions.map((slider, index) => (
+              <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                <input
+                  type="text"
+                  value={slider.name}
+                  onChange={(e) => {
+                    const newSliders = [...formData.sliderDefinitions];
+                    newSliders[index].name = e.target.value;
+                    setFormData(prev => ({ ...prev, sliderDefinitions: newSliders }));
+                  }}
+                  placeholder="Input name (e.g., Input Tokens)"
+                  className="flex-1 rounded-lg bg-white border border-gray-200 text-gray-900 px-4 py-2 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                />
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => removeSlider(index)}
+                  className="text-red-600 hover:text-red-700 flex-shrink-0"
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Output Fields */}
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+          <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <h3 className="text-lg font-semibold text-gray-900">Output Fields</h3>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={addOutput}
+              className="text-orange-500 hover:text-orange-600"
+            >
+              <Plus className="h-5 w-5" />
+            </Button>
+          </div>
+          <div className="p-6 space-y-4">
+            {formData.outputDefinitions.map((output, index) => (
+              <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                <input
+                  type="text"
+                  value={output.name}
+                  onChange={(e) => {
+                    const newOutputs = [...formData.outputDefinitions];
+                    newOutputs[index].name = e.target.value;
+                    setFormData(prev => ({ ...prev, outputDefinitions: newOutputs }));
+                  }}
+                  placeholder="Output name (e.g., Total Cost)"
+                  className="flex-1 rounded-lg bg-white border border-gray-200 text-gray-900 px-4 py-2 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                />
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => removeOutput(index)}
+                  className="text-red-600 hover:text-red-700 flex-shrink-0"
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Row 3: Price Detail Fields */}
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+          <h3 className="text-lg font-semibold text-gray-900">Price Detail Fields</h3>
+          <Button
             type="button"
+            variant="secondary"
             onClick={addPriceDetail}
             className="text-orange-500 hover:text-orange-600"
           >
             <Plus className="h-5 w-5" />
-          </button>
+          </Button>
         </div>
-        
-        {formData.priceDetailFields.map((field, index) => (
-          <div key={index} className="space-y-4 p-4 bg-white rounded-lg border border-gray-100">
-            <div className="flex items-center space-x-4">
-              <div className="flex-1">
-                <label className="block text-sm text-gray-600">Field Name</label>
+        <div className="p-6 space-y-4">
+          {formData.priceDetailFields.map((field, index) => (
+            <div key={index} className="grid grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Field Name</label>
                 <input
                   type="text"
                   value={field.name}
@@ -181,12 +198,12 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({ onSubmit, initialDat
                     newFields[index].name = e.target.value;
                     setFormData(prev => ({ ...prev, priceDetailFields: newFields }));
                   }}
-                  placeholder="Field name (e.g., Base Price, Context Length)"
-                  className="mt-1 w-full rounded-lg bg-white border border-gray-200 text-gray-900 px-4 py-2 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                  placeholder="Field name (e.g., Base Price)"
+                  className="w-full rounded-lg bg-white border border-gray-200 text-gray-900 px-4 py-2 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-600">Type</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
                 <select
                   value={field.type}
                   onChange={(e) => {
@@ -194,47 +211,51 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({ onSubmit, initialDat
                     newFields[index].type = e.target.value as 'text' | 'number' | 'boolean';
                     setFormData(prev => ({ ...prev, priceDetailFields: newFields }));
                   }}
-                  className="mt-1 block w-full rounded-lg bg-white border border-gray-200 text-gray-900 px-4 py-2 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                  className="w-full rounded-lg bg-white border border-gray-200 text-gray-900 px-4 py-2 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
                 >
                   <option value="text">Text</option>
                   <option value="number">Number</option>
                   <option value="boolean">Boolean</option>
                 </select>
               </div>
-              <button
-                type="button"
-                onClick={() => removePriceDetail(index)}
-                className="text-red-500 hover:text-red-600 mt-6"
-              >
-                <Minus className="h-5 w-5" />
-              </button>
+              <div className="flex items-end gap-4">
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                  <input
+                    type="text"
+                    value={field.description}
+                    onChange={(e) => {
+                      const newFields = [...formData.priceDetailFields];
+                      newFields[index].description = e.target.value;
+                      setFormData(prev => ({ ...prev, priceDetailFields: newFields }));
+                    }}
+                    placeholder="Field description"
+                    className="w-full rounded-lg bg-white border border-gray-200 text-gray-900 px-4 py-2 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                  />
+                </div>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => removePriceDetail(index)}
+                  className="text-red-600 hover:text-red-700"
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
-            <div>
-              <label className="block text-sm text-gray-600">Description</label>
-              <input
-                type="text"
-                value={field.description}
-                onChange={(e) => {
-                  const newFields = [...formData.priceDetailFields];
-                  newFields[index].description = e.target.value;
-                  setFormData(prev => ({ ...prev, priceDetailFields: newFields }));
-                }}
-                placeholder="Field description"
-                className="mt-1 w-full rounded-lg bg-white border border-gray-200 text-gray-900 px-4 py-2 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
-              />
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
+      {/* Submit Button */}
       <div className="flex justify-end">
-        <button
+        <Button
           type="submit"
-          className="flex items-center space-x-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+          className="bg-orange-500 text-white px-8 py-3 rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500/20 inline-flex items-center gap-2 text-base"
         >
           <Save className="h-5 w-5" />
           <span>Save Category</span>
-        </button>
+        </Button>
       </div>
     </form>
   );

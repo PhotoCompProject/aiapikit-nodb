@@ -1,93 +1,106 @@
-# Deployment System Documentation
+# Deployment Guide
 
-This project includes a comprehensive deployment system with both manual deployment and live sync capabilities.
+This project includes two deployment methods: FTP and Git. You can use either one or both depending on your needs.
 
-## Setup
+## Prerequisites
 
-1. Copy `.env.example` to `.env` and fill in your credentials:
-```env
-# FTP Deployment
-FTP_HOST=your-ftp-host
-FTP_USER=your-username
-FTP_PASSWORD=your-password
-FTP_PORT=21
-FTP_REMOTE_PATH=/
-
-# Git Deployment
-GITHUB_TOKEN=your-github-token
-GITHUB_REPO=your-repo-name
+1. Install dependencies:
+```bash
+npm install
 ```
 
-## Available Commands
+2. Create a `.env` file based on `.env.example`:
+```bash
+cp .env.example .env
+```
 
-### Manual Deployment
+3. Configure your environment variables in `.env`:
+```env
+# FTP Deployment Configuration
+FTP_HOST=your-ftp-host.com
+FTP_USER=your-ftp-username
+FTP_PASSWORD=your-ftp-password
+FTP_PORT=21
+FTP_REMOTE_ROOT=/public_html/your-subdirectory
 
-- `npm run deploy:ftp` - Builds the project and deploys to Bluehost via FTP
-- `npm run deploy:git` - Commits and pushes to GitHub
-- `npm run deploy` - Runs both FTP and Git deployment in sequence
+# Development Configuration
+VITE_API_URL=http://localhost:3000/api
+VITE_ENVIRONMENT=development
+```
 
-### Live Development with FTP Sync
+## Deployment Methods
 
-- `npm run sync` - Builds and starts FTP sync (watches dist folder for changes)
-- `npm run dev:sync` - Runs development server and FTP sync simultaneously
+### 1. FTP Deployment
 
-## Features
+This method builds your project and uploads it to your FTP server.
 
-### FTP Deployment
-- Automatic file watching and instant FTP uploads
-- Handles file additions, modifications, and deletions
-- Maintains FTP connection pool for better performance
-- Creates remote directories automatically
-- Supports both one-time deployment and continuous sync
+```bash
+npm run deploy:ftp
+```
 
-### Git Deployment
-- Automatic commit messages with timestamps
-- Handles branch creation and management
-- Includes error handling and retry logic
-- Supports force push when needed
+The script will:
+1. Build your project (`npm run build`)
+2. Upload the built files to your FTP server
+3. Exclude unnecessary files (node_modules, .git, etc.)
 
-## Usage Guide
+### 2. Git Deployment
 
-### Development with Live Sync
-1. Run `npm run dev:sync` to start both development server and FTP sync
-2. Make changes to your code
-3. Changes will be automatically built and synced to the FTP server
-4. Press Ctrl+C to stop the development server and sync
+This method commits and pushes your changes to Git.
 
-### Production Deployment
-1. Make your changes to the code
-2. Run `npm run deploy` to:
-   - Build the project
-   - Deploy to Bluehost via FTP
-   - Commit and push to GitHub
+```bash
+npm run deploy:git
+```
 
-### Manual Deployment Options
-- Use `npm run deploy:ftp` if you only want to deploy to FTP
-- Use `npm run deploy:git` if you only want to commit and push to GitHub
+The script will:
+1. Build your project
+2. Add all changes to Git
+3. Create a commit with timestamp
+4. Push to your current branch
 
-## Important Notes
+### 3. Combined Deployment
 
-1. Keep your `.env` file secure and never commit it to git
-2. Use `.env.example` as a template when setting up on a new machine
-3. The live sync watches the `dist` directory, so make sure to run build first
-4. Git deployment automatically includes timestamps in commit messages
-5. FTP sync will create remote directories if they don't exist
+To run both deployment methods in sequence:
+
+```bash
+npm run deploy
+```
+
+This will:
+1. Run FTP deployment
+2. Run Git deployment
+
+## Configuration
+
+### FTP Configuration
+
+Update your `.env` file with your FTP credentials:
+
+- `FTP_HOST`: Your FTP server hostname
+- `FTP_USER`: Your FTP username
+- `FTP_PASSWORD`: Your FTP password
+- `FTP_PORT`: FTP port (usually 21)
+- `FTP_REMOTE_ROOT`: Remote directory path where files should be uploaded
+
+### Git Configuration
+
+The Git deployment script uses your local Git configuration. Make sure:
+
+1. Git is installed and configured
+2. You have the correct remote repository set up
+3. You have the necessary permissions to push to the repository
 
 ## Troubleshooting
 
-If you encounter issues:
+### FTP Deployment Issues
 
-1. FTP Connection Issues:
-   - Check your FTP credentials in `.env`
-   - Verify the FTP server is accessible
-   - Check if the remote path exists and you have permissions
+1. Check your FTP credentials in `.env`
+2. Verify the FTP server is accessible
+3. Check if the remote directory exists and has write permissions
+4. Try using passive mode if behind a firewall
 
-2. Git Deployment Issues:
-   - Ensure you have the correct repository URL
-   - Check if you have write permissions to the repository
-   - Try running git commands manually to verify access
+### Git Deployment Issues
 
-3. Sync Issues:
-   - Make sure the dist directory exists (run build first)
-   - Check if files are being watched (should see console output)
-   - Verify FTP connection and permissions
+1. Check if you're on the correct branch
+2. Verify your Git remote configuration
+3. Ensure you have the latest changes (`git pull`)
+4. Check if you have uncommitted changes

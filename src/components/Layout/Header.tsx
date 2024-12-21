@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Zap, Settings } from 'lucide-react';
+import { Search, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../store/useStore';
 
@@ -11,13 +11,9 @@ export const Header: React.FC = () => {
       <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center space-x-3">
-              <Link to="/" className="flex items-center space-x-3">
-                <Zap className="h-6 w-6 text-orange-500" />
-                <div>
-                  <h1 className="text-xl font-bold text-gray-900">AiApiKit</h1>
-                  <p className="text-xs text-gray-500">Find the perfect AI API</p>
-                </div>
+            <div className="flex items-center -ml-1">
+              <Link to="/" className="flex items-center">
+                <img src="/logo.svg" alt="AiApiKit Logo" className="h-10 w-auto" />
               </Link>
             </div>
 

@@ -1,102 +1,48 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { MainLayout } from './components/Layout/MainLayout';
-import { MobileControlBar } from './components/Controls/MobileControlBar';
-import { ApiCard } from './components/ApiCard/ApiCard';
-import { AdminLogin } from './pages/AdminLogin';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { AdminCategories } from './pages/AdminCategories';
+import { AdminCategoryForm } from './pages/AdminCategoryForm';
+import { AdminApis } from './pages/AdminApis';
+import { AdminApiForm } from './pages/AdminApiForm';
 import { AdminAdmins } from './pages/AdminAdmins';
-import { AdminProviders } from './pages/AdminProviders';
+import { AdminForm } from './pages/AdminForm';
+import { AdminLogin } from './pages/AdminLogin';
+import { AdminActivities } from './pages/AdminActivities';
+import { ActivityDetails } from './components/Admin/Activities/ActivityDetails';
 import { ProtectedRoute } from './components/Admin/ProtectedRoute';
-import { useStore } from './store/useStore';
-import { apiProviders } from './data/apiProviders';
-import { filterAndSortApis } from './utils/filterUtils';
-import { useDebounce } from './hooks/useDebounce';
+import { MainLayout } from './components/Layout/MainLayout';
 
-function ApiList() {
-  const { 
-    selectedCategory, 
-    searchQuery, 
-    filters,
-    globalUsage,
-    usageOverrides,
-    hasActiveSliders
-  } = useStore();
-
-  const debouncedGlobalUsage = useDebounce(globalUsage, 2000);
-  const debouncedUsageOverrides = useDebounce(usageOverrides, 2000);
-
-  const filteredApis = filterAndSortApis(
-    apiProviders,
-    filters,
-    searchQuery,
-    selectedCategory,
-    usageOverrides,
-    globalUsage,
-    debouncedUsageOverrides,
-    debouncedGlobalUsage,
-    hasActiveSliders
-  );
-
+const App: React.FC = () => {
   return (
-    <MainLayout>
-      <div className="space-y-4">
-        <div className="lg:hidden">
-          <MobileControlBar />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
-          {filteredApis.map((api) => (
-            <ApiCard key={api.id} api={api} />
-          ))}
-        </div>
-      </div>
-    </MainLayout>
-  );
-}
-
-function App() {
-  return (
-    <Router>
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<ApiList />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route
-          path="/admin/dashboard"
-          element={
-            <ProtectedRoute>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/categories"
-          element={
-            <ProtectedRoute>
-              <AdminCategories />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/providers"
-          element={
-            <ProtectedRoute>
-              <AdminProviders />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/admins"
-          element={
-            <ProtectedRoute>
-              <AdminAdmins />
-            </ProtectedRoute>
-          }
-        />
+        {/* Public Routes */}
+        <Route path="/" element={<MainLayout><div className="container mx-auto px-4"></div></MainLayout>} />
+        <Route path="/admin" element={<AdminLogin />} />
+
+        {/* Protected Admin Routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          
+          <Route path="/admin/categories" element={<AdminCategories />} />
+          <Route path="/admin/categories/add" element={<AdminCategoryForm />} />
+          <Route path="/admin/categories/edit/:id" element={<AdminCategoryForm />} />
+          
+          <Route path="/admin/apis" element={<AdminApis />} />
+          <Route path="/admin/apis/add" element={<AdminApiForm />} />
+          <Route path="/admin/apis/edit/:id" element={<AdminApiForm />} />
+          
+          <Route path="/admin/admins" element={<AdminAdmins />} />
+          <Route path="/admin/admins/add" element={<AdminForm />} />
+          <Route path="/admin/admins/edit/:id" element={<AdminForm />} />
+          
+          <Route path="/admin/activities" element={<AdminActivities />} />
+          <Route path="/admin/activities/:id" element={<ActivityDetails />} />
+        </Route>
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
-

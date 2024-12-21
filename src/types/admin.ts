@@ -64,6 +64,50 @@ export interface Admin {
   id: string;
   name: string;
   email: string;
-  role: 'super_admin' | 'admin';
+  password?: string;
+  role: AdminRole;
   lastLogin: string;
+  status: AdminStatus;
+  createdAt: string;
+  updatedAt: string;
+  permissions?: AdminPermission[];
 }
+
+export type AdminRole = 'super_admin' | 'admin';
+
+export type AdminStatus = 'active' | 'inactive' | 'suspended';
+
+export type AdminPermission = 
+  | 'manage_admins'
+  | 'manage_categories'
+  | 'manage_providers'
+  | 'view_dashboard'
+  | 'edit_settings';
+
+export interface AdminAuditLog {
+  id: string;
+  adminId: string;
+  action: AdminAuditAction;
+  details: string;
+  timestamp: string;
+  ipAddress?: string;
+  entityType: 'admin' | 'category' | 'api' | 'provider';
+  entityId: string;
+  changes?: {
+    field: string;
+    before: any;
+    after: any;
+  }[];
+  metadata?: Record<string, any>;
+}
+
+export type AdminAuditAction = 
+  | 'login'
+  | 'logout'
+  | 'create'
+  | 'update'
+  | 'delete'
+  | 'toggle_featured'
+  | 'update_status'
+  | 'update_permissions'
+  | 'update_configuration';

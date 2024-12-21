@@ -1,16 +1,14 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-}
+export const ProtectedRoute: React.FC = () => {
+  const isAuthenticated = localStorage.getItem('adminLoggedIn') === 'true';
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
-
-  if (!isLoggedIn) {
+  if (!isAuthenticated) {
+    // Redirect to login if not authenticated
     return <Navigate to="/admin" replace />;
   }
 
-  return <>{children}</>;
+  // Render child routes
+  return <Outlet />;
 };

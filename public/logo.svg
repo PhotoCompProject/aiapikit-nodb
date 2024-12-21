@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="240" height="48" viewBox="0 0 240 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- AI Icon Circle -->
+  <circle cx="24" cy="24" r="20" fill="#F97316"/>
+  
+  <!-- AI Icon Inside Circle -->
+  <g transform="translate(12,12)">
+    <!-- Stylized AI Chip -->
+    <rect x="4" y="4" width="16" height="16" stroke="white" stroke-width="2" fill="none"/>
+    <rect x="8" y="8" width="8" height="8" fill="white"/>
+    <line x1="12" y1="4" x2="12" y2="8" stroke="white" stroke-width="2"/>
+    <line x1="12" y1="16" x2="12" y2="20" stroke="white" stroke-width="2"/>
+    <line x1="4" y1="12" x2="8" y2="12" stroke="white" stroke-width="2"/>
+    <line x1="16" y1="12" x2="20" y2="12" stroke="white" stroke-width="2"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="56" y="32" font-family="Arial" font-weight="bold" font-size="28">
+    <tspan fill="#F97316">Ai</tspan>
+    <tspan fill="#111827">Api</tspan>
+    <tspan fill="#F97316">Kit</tspan>
+  </text>
+</svg>

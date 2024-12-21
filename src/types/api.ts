@@ -3,18 +3,40 @@ export interface ApiProvider {
   name: string;
   provider: string;
   category: ApiCategory;
+  featured: boolean;
   description: string;
   pricing: PricingModel;
   features: string[];
-  documentation: string;
-  basePrice: number;
-  logo: string;
-  inputMetric: InputMetric;
-  pricePerUnit: {
-    input?: number;
-    output?: number;
-    operation?: number;
+  documentationUrl: string;
+  logo: {
+    type: 'url' | 'upload';
+    value: string;
   };
+  sliders: Array<{
+    name: string;
+    minValue: number;
+    maxValue: number;
+    step: number;
+  }>;
+  outputs: Array<{
+    name: string;
+    costPerUnit: number;
+    monthlyCalculation: string;
+    yearlyCalculation: string;
+  }>;
+  priceDetails: PriceDetail[];
+  customFields: CustomField[];
+}
+
+export interface PriceDetail {
+  name: string;
+  value: string | number | boolean;
+}
+
+export interface CustomField {
+  name: string;
+  type: 'text' | 'number' | 'boolean';
+  value: string;
 }
 
 export type ApiCategory =
